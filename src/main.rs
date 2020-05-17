@@ -14,6 +14,7 @@ fn main() {
 	let opt = Opt::from_args();
 	let list = Ls{};
 
+	// run ls with specified path
 	match list.run(&opt.path) {
 		Ok(_) => println!("Successfully read from directory"),
 		Err(e) => println!("Failed with: {}", e),

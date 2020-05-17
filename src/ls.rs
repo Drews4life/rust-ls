@@ -12,6 +12,7 @@ pub struct Ls {}
 impl Ls {
     pub fn run (&self, path: &PathBuf) -> Result<(), Box<dyn Error>> {
         if path.is_dir() {
+            //Reading the directory and getting
             for entry in fs::read_dir(path)? {
                 self.print_entry(entry?);
             }
@@ -20,19 +21,20 @@ impl Ls {
     }
 
     fn print_entry(&self, entry: DirEntry) -> Result<(), Box<dyn Error>>{
+        //Getting metadata, may return an error
         let metadata = entry.metadata()?;
         let file_name = entry
             .file_name()
             .into_string()
             .or_else(|f| Err(format!("Invalid entry: {:?}", f)))?;
 
-        let size = metadata.len();
+        let file_size = metadata.len();
         let mode = metadata.permissions().mode();
 
         println!(
             "{} {:>5} {} {}",
             self.get_file_permissions(mode as u32),
-            size,
+            file_size,
             self.format_time(metadata.modified()?),
             file_name
         );
